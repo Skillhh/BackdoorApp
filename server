@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+
+""" Imports """
+import socket
+
+def connection():
+
+    global conn 
+    global ip
+    global target
+
+
+
+
+def main():
+
+    
+
+
+
+
+if __name__ == "__main__":
+    main()

