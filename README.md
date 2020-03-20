@@ -35,7 +35,7 @@ $ Exit    --> Finish shell
 ### Contributors
 <hr>
 Giovanny Ortegon - 934@holbertonschool.com<br>
-Joseph Delgadillo<br>
+Joseph Delgadillo - Author<br>
 
 ### Bibligraphy
 
