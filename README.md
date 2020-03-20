@@ -10,7 +10,7 @@ But in this project, the connection will be only one to one (client / server) wi
 ### Objetive
 
 <hr>
-1. Take total cotrol of machine<br>
+1. Take total control of machine<br>
 2. Persisten on Reboot<br>
 
 
@@ -30,7 +30,6 @@ $ Exit    --> Finish shell
 ```
 
 * And basic commands of Linux and Windows terminal
-
 <br>
 
 ### Contributors
