@@ -42,7 +42,7 @@ Server and Client connected
 $ ./server_shell
 [+] Listening for Incommig Connections...
 [+] Connection established from: 
-[+] Address: 192.168.1.55
+[+] Address: 127.0.0.1
 [+] port: 46020
 [+] Connected
 Linux@127.0.0.1#
